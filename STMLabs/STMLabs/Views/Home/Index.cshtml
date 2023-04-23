@@ -1,0 +1,49 @@
+﻿@model CurrentDirectory
+
+<h1>@Model.Path</h1>
+
+<ul>
+    @foreach (var subDirectory in Model.SubDirectories)
+    {
+        <li>
+            <img src="../assets/folder.svg" class="img-file"/>
+            <a asp-controller="Home" asp-action="Directory" asp-route-path="@subDirectory.Path">@subDirectory.Name</a> - @BytesToString(subDirectory.Size)
+        </li>
+    }
+</ul>
+
+<ul>
+    @foreach (var file in Model.Files)
+    {
+        <li>
+            <img src="../assets/file.svg" class="img-file"/>
+            @file.Name - @BytesToString(file.Size)
+        </li>
+    }
+</ul>
+
+@functions {
+
+    private string BytesToString(long byteCount)
+    {
+        string[] suffixes = {"B", "KB", "MB", "GB", "TB", "PB"};
+        int suffixIndex = 0;
+        double bytes = byteCount;
+        while (bytes >= 1024 && suffixIndex < suffixes.Length - 1)
+        {
+            bytes /= 1024;
+            suffixIndex++;
+        }
+        return $"{bytes:0.##} {suffixes[suffixIndex]}";
+    }
+}
+
+<style>
+    .img-file{
+    width: 20px;
+    }
+    
+    li:hover{
+    background: rgba(239,239,239, 0.6);
+    }
+</style>
