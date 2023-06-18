@@ -17,7 +17,7 @@ public class HomeController : Controller
     }
     public IActionResult Index()
     {
-        var directory = _directoryMethods.GetDirectories("C:\\");
+        var directory = _directoryMethods.GetDirectories("/app");
 
         return View(directory);
     }
