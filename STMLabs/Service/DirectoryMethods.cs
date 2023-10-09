@@ -2,13 +2,20 @@
 using Directory = STMLabs.Models.Directory;
 using File = STMLabs.Models.File;
 
+
 namespace STMLabs.Service
 {
     public class DirectoryMethods
     {
-        private readonly Dictionary<string, long> _directorySizes = new Dictionary<string, long>();
+        private readonly Dictionary<string, long> _directorySizes = new();
+        private readonly Logger<DirectoryMethods> _logger;
 
-        public CurrentDirectory GetDirectories(string path)
+        public DirectoryMethods(Logger<DirectoryMethods> logger)
+        {
+            _logger = logger;
+        }
+
+        public async Task<CurrentDirectory> GetDirectories(string path)
         {
             var directory = new CurrentDirectory()
             {
@@ -27,7 +34,7 @@ namespace STMLabs.Service
                     Name = directoryInfo.Name,
                     Path = directoryInfo.FullName
                 };
-                subDirectory.Size = GetDirectorySize(subDirectory.Path);
+                subDirectory.Size = await GetDirectorySize(subDirectory.Path);
                 _directorySizes[subDirectory.Path] = subDirectory.Size;
                 directory.SubDirectories.Add(subDirectory);
             }
@@ -52,20 +59,20 @@ namespace STMLabs.Service
         }
 
 
-        private long GetDirectorySize(string path)
+        private async Task<long> GetDirectorySize(string path)
         {
-            if (_directorySizes.ContainsKey(path))
+            if (_directorySizes.TryGetValue(path, out var directorySize))
             {
-                return _directorySizes[path];
+                return directorySize;
             }
 
             var directoryInfo = new DirectoryInfo(path);
-            var size = GetDirectorySizeRecursive(directoryInfo);
+            var size = await GetDirectorySizeRecursive(directoryInfo);
             _directorySizes[path] = size;
             return size;
         }
 
-        private long GetDirectorySizeRecursive(DirectoryInfo directoryInfo)
+        private async Task<long> GetDirectorySizeRecursive(DirectoryInfo directoryInfo)
         {
             long size = 0;
 
@@ -85,9 +92,9 @@ namespace STMLabs.Service
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+                _logger.LogError(ex.Message);
             }
 
             try
@@ -98,7 +105,7 @@ namespace STMLabs.Service
                 {
                     try
                     {
-                        long subDirectorySize = GetDirectorySizeRecursive(subDirectoryInfo);
+                        long subDirectorySize = await GetDirectorySizeRecursive(subDirectoryInfo);
                         size += subDirectorySize;
                         _directorySizes[subDirectoryInfo.FullName] = subDirectorySize;
                     }
@@ -107,9 +114,9 @@ namespace STMLabs.Service
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+               _logger.LogError(ex.Message);
             }
 
             return size;

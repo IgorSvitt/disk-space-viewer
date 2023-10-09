@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\STMLabs\\STMLabs\\STMLabs\\STMLabs.csproj",
+      "projectUniqueName": "C:\\Projects\\disk-space-viewer\\STMLabs\\STMLabs.csproj",
       "projectName": "STMLabs",
-      "projectPath": "C:\\Projects\\STMLabs\\STMLabs\\STMLabs\\STMLabs.csproj",
+      "projectPath": "C:\\Projects\\disk-space-viewer\\STMLabs\\STMLabs.csproj",
       "packagesPath": "C:\\Users\\Igor\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\STMLabs\\STMLabs\\STMLabs\\obj\\",
+      "outputPath": "C:\\Projects\\disk-space-viewer\\STMLabs\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Igor\\AppData\\Roaming\\NuGet\\NuGet.Config"

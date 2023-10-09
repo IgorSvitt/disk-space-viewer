@@ -7,7 +7,7 @@
     {
         <li>
             <img src="../assets/folder.svg" class="img-file"/>
-            <a asp-controller="Home" asp-action="Directory" asp-route-path="@subDirectory.Path">@subDirectory.Name</a> - @BytesToString(subDirectory.Size)
+            <a asp-controller="Home" asp-action="Directory" asp-route-path="@subDirectory.Path">@subDirectory.Name</a> - @await BytesToString(subDirectory.Size)
         </li>
     }
 </ul>
@@ -17,14 +17,14 @@
     {
         <li>
             <img src="../assets/file.svg" class="img-file"/>
-            @file.Name - @BytesToString(file.Size)
+            @file.Name - @await BytesToString(file.Size)
         </li>
     }
 </ul>
 
 @functions {
 
-    private string BytesToString(long byteCount)
+    private async Task<string> BytesToString(long byteCount)
     {
         string[] suffixes = {"B", "KB", "MB", "GB", "TB", "PB"};
         int suffixIndex = 0;

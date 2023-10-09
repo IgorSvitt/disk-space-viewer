@@ -13,18 +13,18 @@ public class HomeController : Controller
 
     public HomeController(DirectoryMethods directoryMethods)
     {
-        _directoryMethods = directoryMethods;
+        _directoryMethods =  directoryMethods;
     }
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var directory = _directoryMethods.GetDirectories("/app");
+        var directory = await _directoryMethods.GetDirectories("C:\\");
 
         return View(directory);
     }
     
-    public IActionResult Directory(string path)
+    public async Task<IActionResult> Directory(string path)
     {
-        var directory = _directoryMethods.GetDirectories(path);
+        var directory =  await _directoryMethods.GetDirectories(path);
 
         return View("Index", directory);
     }
